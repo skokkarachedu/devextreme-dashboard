@@ -1,59 +1,69 @@
-# DevextremeStandard
+# DashDX
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.3.
+An Angular dashboard using DevExtreme UI components and Gridster layouts.
 
-## Development server
+**Suggested short name:** DashDX. **Subtitle:** Angular DevExtreme Dashboard. The existing package/project identifier remains `devextreme-standard`; these guides do not rename application code.
 
-To start a local development server, run:
+## Documentation
 
-```bash
-ng serve
-```
+- [Project setup](README_SETUP.md): installation, development commands, and troubleshooting.
+- [Angular and DevExtreme basics](README_BASICS.md): frontend/backend concepts and a walkthrough of the code.
+- [Nested template gallery](devextreme-ui-template-gallery/README.md): separate examples with their own dependencies and commands.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## What the main application does
 
-## Code scaffolding
+- Displays a DevExtreme line chart with initial sample data.
+- Appends a random chart value every three seconds, retaining up to ten points.
+- Displays a DevExtreme DataGrid containing sample sensor readings.
+- Arranges chart, table, and information widgets using Gridster.
+- Allows dragging, resizing, and adding information widgets.
+- Provides a time-range selector that currently updates only the selected value.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The sensor values and status messages are hardcoded examples. Chart updates are simulated in the browser, not received from sensors or a server.
 
-```bash
-ng generate component component-name
-```
+## Frontend and backend
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+| Part | Current implementation |
+| --- | --- |
+| Frontend framework | Angular 21 with a standalone root component |
+| Language and styling | TypeScript 5.9, HTML templates, CSS |
+| UI components | DevExtreme and devextreme-angular 25.2 |
+| Dashboard layout | angular-gridster2 21 |
+| Timed updates | RxJS 7.8 |
+| Build tooling | Angular CLI/build 21 and npm |
+| Tests | Angular unit-test builder, Vitest 4, jsdom |
+| Backend/API | No application backend or API calls in the root application's source |
+| Database/persistence | No database or saved layouts |
 
-```bash
-ng generate --help
-```
+`provideHttpClient()` is registered, but no HTTP requests are implemented in the main app. Angular's development server serves the frontend; it is not a business API.
 
-## Building
+## Main files
 
-To build the project run:
+| File | Responsibility |
+| --- | --- |
+| [src/main.ts](src/main.ts) | Starts Angular |
+| [app.ts](src/app/app.ts) | Widget state, Gridster settings, simulated updates, add/remove methods |
+| [app.html](src/app/app.html) | Toolbar, chart, data grid, and information widgets |
+| [app.css](src/app/app.css) | Dashboard layout and styling |
+| [app.config.ts](src/app/app.config.ts) | Registers application providers |
+| [app.routes.ts](src/app/app.routes.ts) | Currently an empty route list |
+| [angular.json](angular.json) | Build configuration and DevExtreme light theme |
+| [package.json](package.json) | Dependencies and npm scripts |
 
-```bash
-ng build
-```
+The root component displays the dashboard directly at `/`; there are no configured feature routes.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Separate template gallery
 
-## Running unit tests
+`devextreme-ui-template-gallery/` has its own package.json and workspace packages for Angular, React, Vue, and supporting tools. The root application's imports and build configuration do not integrate it. Running `npm start` from this project's root starts DashDX, not the gallery. Its documentation is preserved.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Current limitations
 
-```bash
-ng test
-```
+- Layouts, added widgets, and chart history reset when the app reloads.
+- Changing the time range does not filter the chart.
+- A `removeWidget()` method exists, but the template has no remove control.
+- New widgets start at coordinate (0, 0); placement relies on Gridster's behavior.
+- The RxJS interval subscription is not disposed when the component is destroyed.
+- Chart data is mutated in place; actual redraw behavior should be checked in a browser.
+- The starter test expects an old greeting heading that is absent from the current template.
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This is a frontend demonstration. This documentation update reviewed the source but did not run builds, tests, or browser checks.
